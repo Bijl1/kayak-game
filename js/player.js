@@ -24,6 +24,10 @@ class Player {
 
         // Append the player element to the game screen element
         this.gameScreen.appendChild(this.element);
+
+            // initialize speed
+        this.speed = 5;
+        this.timeSinceLastPlayerSpeedIncrease = 0.7;
     }
 
     // Method to move the player element

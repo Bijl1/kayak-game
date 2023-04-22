@@ -29,7 +29,10 @@ class Game {
       this.obstacleSpeed = 1; // initial obstacle speed
       this.speedIncreaseInterval = 10000; // interval to increase obstacle speed in milliseconds
       this.lastSpeedIncreaseTime = Date.now(); // time of last speed increase
-    }
+      this.playerSpeedIncrement = 1; // speed increment for player
+      this.lastPlayerSpeedIncreaseTime = Date.now(); // time of last player speed increase
+      this.playerSpeedIncreaseInterval = 10000; // interval to increase player speed in milliseconds
+  }
   
     // start the game loop
     start() {
@@ -68,6 +71,14 @@ class Game {
         // update last speed increase time
         this.lastSpeedIncreaseTime = currentTime;
       }
+
+      const timeSinceLastPlayerSpeedIncrease = currentTime - this.lastPlayerSpeedIncreaseTime;
+    if (timeSinceLastPlayerSpeedIncrease > this.playerSpeedIncreaseInterval) {
+    // increase player speed by playerSpeedIncrement
+    this.player.speed += this.playerSpeedIncrement;
+    // update last player speed increase time
+    this.lastPlayerSpeedIncreaseTime = currentTime;
+  }
   
       // update obstacle speed
       this.obstacles.forEach(obs => obs.speed = this.obstacleSpeed);
