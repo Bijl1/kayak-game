@@ -45,7 +45,7 @@ class Player {
         if (this.top + this.height > this.gameScreen.offsetHeight - 10) {
             this.top = this.gameScreen.offsetHeight - this.height - 10;
         }
-
+// adding comment to try the pusj
         // Update the position of the player element
         this.updatePosition();
     }
