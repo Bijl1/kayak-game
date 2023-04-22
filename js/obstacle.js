@@ -5,11 +5,11 @@ class Obstacle {
   
       // set the initial position, dimensions, and speed of the obstacle
       this.left = Math.floor(Math.random() * 501); // randomize position
-      this.top = 5; // set initial top position
+      this.top = 0; // set initial top position
       this.width = 75; // set the width of the obstacle
       this.height = 100; // set the height of the obstacle
       this.speed = 3; // set the initial speed of the obstacle
-      this.speedIncrement = 1; // set the increment of the speed of the obstacle
+      this.speedIncrement = 0.7; // set the increment of the speed of the obstacle
   
       // create an img element for the obstacle and set its attributes
       this.element = document.createElement("img");
