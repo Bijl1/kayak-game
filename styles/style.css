@@ -1,29 +1,66 @@
 body {
-  margin: 0;
   padding: 0;
+  text-align: center;
 }
 
-canvas {
-  border: 1px solid black;
+#game-intro {
+  padding: 20px 0px;
 }
 
-#restart-button {
+#game-container {
+  display: flex;
+  width: 100vw;
+  padding: 20px 0px;
+  justify-content: center;
+}
+
+#game-screen {
   display: none;
-  position: absolute;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  font-size: 32px;
-  width: 200px;
-  height: 100px;
-  bottom: 15%;
-  left: calc(50% - 100px);
-  z-index: 999999;
-  border-radius: 5px;
+  align-content: center;
+  padding: 20px 0px;
+  overflow: hidden;
+  position: relative;
+  background-image: url(../images/road.png);
+  background-size: cover;
+  animation: slide 5s linear infinite;
 }
-@media only screen and (max-height: 500px) {
-  #restart-button {
-    bottom: 0%;
-    height: 80px;
+
+@keyframes slide {
+  0% {
+    background-position: 0 -1000px;
   }
+  95% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 50px;
+  }
+}
+
+#game-end {
+  display: none;
+}
+
+.game-intro p {
+  font-size: 18px;
+  font-family: "Verdana";
+}
+
+.logo-img {
+  width: 350px;
+}
+
+.arrows-img {
+  width: 150px;
+}
+
+body button {
+  font-size: 30px;
+  background-color: hsl(22, 93%, 41%);
+  color: #fff;
+  padding: 20px 40px;
+  border: 0;
+  box-shadow: 0;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }

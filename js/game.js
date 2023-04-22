@@ -1,134 +1,96 @@
-var canvas = document.getElementById("game-canvas");
-var ctx = canvas.getContext("2d");
-
-var kayak = {
-  x: canvas.width / 2,
-  y: canvas.height - 100,
-  width: 50,
-  height: 50,
-  speed: 5,
-  score: 0
-};
-
-var obstacle = {
-  x: Math.random() * canvas.width,
-  y: 0,
-  width: 50,
-  height: 50,
-  speed: 5
-};
-
-let isGameOver = false;
-let gameOverScreen;
-let gameOverScreenBeingActivated = false;
-let shake = 0;
-
-let date = new Date();
-let time = date.getTime();
-let secondsBetweenRockSpawns = 1;
-
-const FPS = 60;
-
-let scoreKeeper;
-
-var restartButton = document.createElement("button");
-restartButton.id = "restart-button";
-restartButton.innerHTML = "Restart Game";
-document.body.appendChild(restartButton);
-
-restartButton.addEventListener("click", function() {
-  window.location.reload();
-});
-
-function showRestartButton() {
-  restartButton.style.display = "block";
-}
-
-function hideRestartButton() {
-  restartButton.style.display = "none";
-}
-
-function drawKayak() {
-  ctx.fillStyle = "blue";
-  ctx.fillRect(kayak.x, kayak.y, kayak.width, kayak.height);
-}
-
-function drawObstacle() {
-  ctx.fillStyle = "red";
-  ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-}
-
-function updateKayak() {
-  if (kayak.x < 0) {
-    kayak.x = 0;
-  } else if (kayak.x > canvas.width - kayak.width) {
-    kayak.x = canvas.width - kayak.width;
-  }
-}
-
-function updateObstacle() {
-  obstacle.y += obstacle.speed;
-  if (obstacle.y > canvas.height) {
-    obstacle.x = Math.random() * canvas.width;
-    obstacle.y = 0;
-  }
-}
-
-function checkCollision() {
-  if (
-    obstacle.x < kayak.x + kayak.width &&
-    obstacle.x + obstacle.width > kayak.x &&
-    obstacle.y < kayak.y + kayak.height &&
-    obstacle.y + obstacle.height > kayak.y
-  ) {
-    isGameOver = true;
-  }
-}
-
-function drawScore() {
-  ctx.fillStyle = "black";
-  ctx.font = "20px Arial";
-  ctx.fillText("Score: " + kayak.score, 10, 30);
-}
-
-function updateScore() {
-  kayak.score++;
-}
-
-function gameLoop() {
-  if (!isGameOver) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawKayak();
-    drawObstacle();
-    updateKayak();
-    updateObstacle();
-    checkCollision();
-    drawScore();
-    updateScore();
-    requestAnimationFrame(gameLoop);
-  } else {
-    if (!gameOverScreenBeingActivated) {
-      gameOverScreenBeingActivated = true;
-      showRestartButton();
+class Game {
+    constructor(){
+      this.startScreen = document.getElementById("game-intro");
+      this.gameScreen = document.getElementById("game-screen");
+      this.gameEndScreen = document.getElementById("game-end");
+      this.gameScore = document.getElementById("score");
+      this.gameLives = document.getElementById("lives");
+      this.player = new Player( // gameScreen, left, top, width, height, imgSrc
+        this.gameScreen,
+        200,
+        500,
+        50,
+        100,
+        "./images/kayak.png"
+      );
+      this.height = 600;
+      this.width = 500;
+      this.obstacles = [];
+      this.score = 0;
+      this.lives = 3;
+      this.gameIsOver = false;
     }
-    if (shake < 20) {
-      ctx.translate(Math.random() * 10 - 5, Math.random() * 10 - 5);
-      shake++;
-    } else {
-      ctx.translate(0, 0);
-      shake = 0;
+  
+    start() {
+      this.gameScreen.style.height = `${this.height}px`;
+      this.gameScreen.style.width = `${this.width}px`;
+    
+      // hide start screen
+      this.startScreen.style.display = "none";
+      // show game screen
+      this.gameScreen.style.display = "block";
+  
+      this.gameLoop()
     }
-    if (!gameOverScreen) {
-      gameOverScreen = document.createElement("div");
-      gameOverScreen.id = "game-over-screen";
-      gameOverScreen.innerHTML = "Game Over! Your score is: " + kayak.score;
-      document.body.appendChild(gameOverScreen);
+  
+    gameLoop() {
+      console.log("in the game loop");
+    
+      if(this.gameIsOver){
+        return;
+      }
+  
+      this.update();
+      window.requestAnimationFrame(() => this.gameLoop());
+    }
+  
+    update() {
+      console.log("in the update");
+  
+      this.player.move();
+  
+      for(let i = 0; i < this.obstacles.length; i++){
+        const obstacle = this.obstacles[i];
+  
+        obstacle.move();
+  
+        if(obstacle.top > this.height){
+          
+          this.score ++;
+          this.gameScore.innerText = this.score;
+  
+          obstacle.element.remove();
+          this.obstacles.splice(0, 1);
+          i--;
+        } else if (this.player.didCollide(obstacle)){
+          
+          this.lives --;
+          this.gameLives.innerText = this.lives;
+  
+          obstacle.element.remove();
+          this.obstacles.splice(0, 1);
+          i--;
+        }
+      }
+  
+      if(this.lives === 0){
+        this.endGame();
+      }
+  
+      if(Math.random() > 0.98 && this.obstacles.length < 1){
+        this.obstacles.push(new Obstacle(this.gameScreen))
+      }
+    }
+  
+    endGame() {
+      this.player.element.remove();
+      this.obstacles.forEach(obs => obs.element.remove());
+  
+      this.gameIsOver = true;
+  
+      // hide game screen
+      this.gameScreen.style.display = "none";      
+      // show end ga screen
+      this.gameEndScreen.style.display = "block";
     }
   }
-}
-
-function endGame() {
-  isGameOver = true;
-}
-
-gameLoop();
