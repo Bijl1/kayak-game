@@ -4,7 +4,7 @@ let control = document.getElementById("controlButton"); // get the button elemen
 const canvas = document.querySelector("canvas"); // get the first canvas element on the page and assign it to a constant called canvas
 const ctx = canvas.getContext("2d"); // get the 2D context of the canvas and assign it to a constant called ctx
 
-const speed = 5; // assign a constant called speed with a value of 5
+const speed = 10; // assign a constant called speed with a value of 5
 
 canvas.width = 350; // set the width of the canvas to 350 pixels
 canvas.height = 400; // set the height of the canvas to 400 pixels
