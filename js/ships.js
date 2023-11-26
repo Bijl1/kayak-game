@@ -5,7 +5,7 @@ class Ships {
       h: 111,                       // height of the right ship
       x: 190,                       // x-coordinate of the right ship's starting position
       y: 1000,                      // y-coordinate of the right ship's starting position
-      url: "./img/shipright.png",   // URL of the image file for the right ship
+      url: "./img/shipleft.png",   // URL of the image file for the right ship
       speed: 1,                     // speed of the right ship
     };
     this.left = {
@@ -29,22 +29,23 @@ class Ships {
   }
   
   moveRightShip(height, stream) {
-    this.right.y -= stream + this.right.speed;    // move the right ship up by a certain amount
-    if (this.right.y + this.right.h < 0) {        // if the ship goes off the top of the canvas
-      this.right.y = height + this.shipRandomDelay();  // set its position to the bottom with a random delay
-      this.right.speed = Math.floor(Math.random() * 3) + 1; // update its speed randomly
-      this.right.x = Math.floor(Math.random() * (canvas.width - this.right.w)); // update its starting position randomly
+    this.right.y += this.right.speed; // Move the right ship down by a certain amount
+    if (this.right.y > height) { // If the ship goes off the bottom of the canvas
+      this.right.y = -this.right.h - this.shipRandomDelay(); // Set its position to the top with a random delay
+      this.right.speed = Math.floor(Math.random() * 3) + 1; // Update its speed randomly
+      this.right.x = Math.floor(Math.random() * (canvas.width - this.right.w)); // Update its starting position randomly
     }
   }
   
   moveLeftShip(height, stream) {
-    this.left.y += stream + this.left.speed;     // move the left ship down by a certain amount
-    if (this.left.y > height) {                  // if the ship goes off the bottom of the canvas
-      this.left.y = (this.left.h + this.shipRandomDelay()) * -1;  // set its position to the top with a random delay
-      this.left.speed = Math.floor(Math.random() * 3) + 1; // update its speed randomly
-      this.left.x = Math.floor(Math.random() * (canvas.width - this.left.w)); // update its starting position randomly
+    this.left.y += this.left.speed; // Move the left ship down by a certain amount
+    if (this.left.y > height) { // If the ship goes off the bottom of the canvas
+      this.left.y = -this.left.h - this.shipRandomDelay(); // Set its position to the top with a random delay
+      this.left.speed = Math.floor(Math.random() * 3) + 1; // Update its speed randomly
+      this.left.x = Math.floor(Math.random() * (canvas.width - this.left.w)); // Update its starting position randomly
     }
   }
+  
 }
 
 const ship = new Ships();                       // create a new instance of the Ships class
